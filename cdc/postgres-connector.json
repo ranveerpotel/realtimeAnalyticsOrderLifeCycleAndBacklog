@@ -1,0 +1,56 @@
+{
+  "name": "orders-postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "orders_user",
+    "database.password": "orders_pass",
+    "database.dbname": "orders_db",
+    "database.server.name": "orders_ebs",
+
+    "plugin.name": "pgoutput",
+    "publication.name": "orders_pub",
+    "slot.name": "orders_debezium_slot",
+
+    "table.include.list": "public.orders,public.order_line_items,public.inventory,public.shipments,public.allocation_records",
+
+    "topic.prefix": "cdc",
+    "topic.creation.enable": "true",
+    "topic.creation.default.replication.factor": "1",
+    "topic.creation.default.partitions": "16",
+    "topic.creation.orders.include": "cdc.public.orders",
+    "topic.creation.orders.partitions": "64",
+
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "io.confluent.connect.avro.AvroConverter",
+    "value.converter.schema.registry.url": "http://schema-registry:8081",
+    "value.converter.schemas.enable": "true",
+
+    "transforms": "route,unwrap,addMetadata",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.add.fields": "op,table,lsn,source.ts_ms",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.addMetadata.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+    "transforms.addMetadata.static.field": "pipeline_source",
+    "transforms.addMetadata.static.value": "debezium-postgres",
+
+    "decimal.handling.mode": "string",
+    "time.precision.mode": "connect",
+    "timestamp.mode": "commit",
+
+    "heartbeat.interval.ms": "10000",
+    "snapshot.mode": "initial",
+    "snapshot.locking.mode": "none",
+
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true",
+    "errors.deadletterqueue.topic.name": "dlq.cdc_errors",
+    "errors.deadletterqueue.topic.replication.factor": "1"
+  }
+}
