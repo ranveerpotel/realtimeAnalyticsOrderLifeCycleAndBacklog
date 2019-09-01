@@ -1,0 +1,72 @@
+{
+  "orders": {
+    "mappings": {
+      "properties": {
+        "order_id":         {"type": "keyword"},
+        "customer_id":      {"type": "keyword"},
+        "customer_name":    {"type": "text", "fields": {"keyword": {"type": "keyword", "ignore_above": 256}}},
+        "channel":          {"type": "keyword"},
+        "business_unit":    {"type": "keyword"},
+        "product_family":   {"type": "keyword"},
+        "order_status":     {"type": "keyword"},
+        "priority_tier":    {"type": "integer"},
+        "created_at":       {"type": "date"},
+        "updated_at":       {"type": "date"},
+        "total_value":      {"type": "double"},
+        "currency":         {"type": "keyword"},
+        "atp_feasible":     {"type": "boolean"},
+        "expected_ship_date": {"type": "date"},
+        "pipeline_ts":      {"type": "date"},
+        "line_items": {
+          "type": "nested",
+          "properties": {
+            "line_id":        {"type": "keyword"},
+            "sku":            {"type": "keyword"},
+            "product_family": {"type": "keyword"},
+            "description":    {"type": "text"},
+            "quantity":       {"type": "double"},
+            "unit_price":     {"type": "double"},
+            "line_status":    {"type": "keyword"}
+          }
+        },
+        "shipment": {
+          "type": "object",
+          "properties": {
+            "carrier":          {"type": "keyword"},
+            "status":           {"type": "keyword"},
+            "ship_date":        {"type": "date"},
+            "delivery_date":    {"type": "date"}
+          }
+        }
+      }
+    },
+    "settings": {
+      "number_of_shards":   6,
+      "number_of_replicas": 1,
+      "refresh_interval":   "1s",
+      "index.mapping.total_fields.limit": 500
+    }
+  },
+  "backlog_metrics": {
+    "mappings": {
+      "properties": {
+        "business_unit":      {"type": "keyword"},
+        "product_family":     {"type": "keyword"},
+        "horizon_bucket":     {"type": "keyword"},
+        "window_type":        {"type": "keyword"},
+        "window_start":       {"type": "date"},
+        "unfulfilled_demand": {"type": "double"},
+        "available_supply":   {"type": "double"},
+        "demand_gap":         {"type": "double"},
+        "order_count":        {"type": "integer"},
+        "avg_priority":       {"type": "double"},
+        "computed_at":        {"type": "date"}
+      }
+    },
+    "settings": {
+      "number_of_shards":   3,
+      "number_of_replicas": 1,
+      "refresh_interval":   "5s"
+    }
+  }
+}
