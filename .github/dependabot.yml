@@ -1,0 +1,43 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: "/api"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: pip
+    directory: "/flink_jobs"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: pip
+    directory: "/producer"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: pip
+    directory: "/search"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: npm
+    directory: "/dashboard"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
